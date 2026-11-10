@@ -55,7 +55,7 @@
 - Container Runtime via `Dockerfile.vercel` and `vercel.json` (`framework: container`, `git.deploymentEnabled: false`).
 - Database: new database `rust_conduit` in the existing Neon project of the `bdb-express-react-pg-db` resource (created with SQL as `neondb_owner`). `DATABASE_URL` (sensitive, production) is the unpooled URL with the database name changed. `SECRET_KEY` (sensitive, production).
 - The build log shows `Restoring the Buildah store cache ... miss`, so the store cache is active on this project without `VERCEL_BUILDAH_STORE_CACHE`.
-- Smoke deploy `bdb-rust-actix-9d3gauk97-build-deploy-bench.vercel.app`: READY, `/api/tags` 200. `/version` returns `unknown`: on a CLI upload Buildah received neither `--build-env BENCH_GIT_COMMIT` nor `VERCEL_GIT_COMMIT_SHA` (log: `missing "BENCH_GIT_COMMIT" build argument`; the argument is now `BENCH_COMMIT`). Follow-up: a Git-source deployment or another verified way to pass the commit.
+- Smoke deploy `bdb-rust-actix-9d3gauk97-build-deploy-bench.vercel.app`: READY, `/api/tags` 200. `/version` returns `unknown`: on a CLI upload Buildah received neither `--build-env BENCH_GIT_COMMIT` nor `VERCEL_GIT_COMMIT_SHA` (log: `missing "BENCH_GIT_COMMIT" build argument`; the argument is now `BENCH_COMMIT`). Follow-up: a Git-source deployment or another verified way to pass the commit. The probe now identifies a deployment by `run` (`BENCH_RUN_ID`, set per deployment with `vercel deploy --env BENCH_RUN_ID=<id>`), so the commit is no longer needed for that.
 
 ### Fly.io
 
