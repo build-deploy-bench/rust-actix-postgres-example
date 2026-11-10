@@ -200,7 +200,11 @@ mod tests {
     }
 }
 
-const SKIP_AUTH_ROUTES: [SkipAuthRoute; 6] = [
+const SKIP_AUTH_ROUTES: [SkipAuthRoute; 7] = [
+    SkipAuthRoute {
+        path: "/version",
+        method: Method::GET,
+    },
     SkipAuthRoute {
         path: "/api/healthcheck",
         method: Method::GET,
