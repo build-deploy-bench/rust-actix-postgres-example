@@ -12,7 +12,7 @@
 |---|---|
 | Listen on PORT | Bind `0.0.0.0:${PORT:-8080}` (upstream hardcoded `0.0.0.0:8080`). Logs `Server running on port <n>`, the same text as the Node fixture. |
 | Run embedded migrations at startup | `diesel_migrations::embed_migrations!` (pinned `~2.1.0` to match Diesel 2.1.0 in the lockfile) runs at boot, under a Postgres advisory lock so parallel instances do not race. No provider needs `diesel_cli`. |
-| Add /version | `GET /version` returns `{"commit":"<sha>"}`. `build.rs` embeds the first non-empty one of `BENCH_COMMIT`, `RENDER_GIT_COMMIT`, `RAILWAY_GIT_COMMIT_SHA`, `VERCEL_GIT_COMMIT_SHA`, else `unknown`. It does not touch the database. |
+| Add /version | `GET /version` returns `{"commit":"<sha>","run":"<id>"}`. `run` is the runtime env var `BENCH_RUN_ID` (else `unknown`). The harness sets it before each deploy, so it identifies the deployment even when the commit is the same. `build.rs` embeds the first non-empty one of `BENCH_COMMIT`, `RENDER_GIT_COMMIT`, `RAILWAY_GIT_COMMIT_SHA`, `VERCEL_GIT_COMMIT_SHA`, else `unknown`. It does not touch the database. |
 | Pin Rust, add markers | `rust-toolchain.toml` pins `1.99.1` (profile minimal). `bench/build.sh {install|build|all}` prints the `::bench::` markers. |
 | CORS default | Upstream defaulted `FRONTEND_ORIGIN` to `"*"`, which actix-cors rejects, so the server never started without the variable. Unset now means any origin. |
 | Fly and Vercel configs | `Dockerfile.fly` and `Dockerfile.vercel` (identical below the header), `fly.toml`, `vercel.json`. The upstream root `Dockerfile` (dev image with cargo-watch) is renamed to `Dockerfile.dev`; `compose.yaml` points to it. |
