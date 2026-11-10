@@ -1,8 +1,8 @@
 // Embeds the deployed commit for the /version endpoint.
 // Each provider exposes the commit at build time under its own name. Docker builds without
-// such a variable (Fly) get the commit as the BENCH_GIT_COMMIT build argument.
+// such a variable (Fly) get the commit as the BENCH_COMMIT build argument, which overrides the others.
 const COMMIT_VARS: [&str; 4] = [
-    "BENCH_GIT_COMMIT",
+    "BENCH_COMMIT",
     "RENDER_GIT_COMMIT",
     "RAILWAY_GIT_COMMIT_SHA",
     "VERCEL_GIT_COMMIT_SHA",

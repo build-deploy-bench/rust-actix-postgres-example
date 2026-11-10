@@ -12,7 +12,7 @@
 |---|---|
 | Listen on PORT | Bind `0.0.0.0:${PORT:-8080}` (upstream hardcoded `0.0.0.0:8080`). Logs `Server running on port <n>`, the same text as the Node fixture. |
 | Run embedded migrations at startup | `diesel_migrations::embed_migrations!` (pinned `~2.1.0` to match Diesel 2.1.0 in the lockfile) runs at boot, under a Postgres advisory lock so parallel instances do not race. No provider needs `diesel_cli`. |
-| Add /version | `GET /version` returns `{"commit":"<sha>"}`. `build.rs` embeds the first non-empty one of `BENCH_GIT_COMMIT`, `RENDER_GIT_COMMIT`, `RAILWAY_GIT_COMMIT_SHA`, `VERCEL_GIT_COMMIT_SHA`, else `unknown`. It does not touch the database. |
+| Add /version | `GET /version` returns `{"commit":"<sha>"}`. `build.rs` embeds the first non-empty one of `BENCH_COMMIT`, `RENDER_GIT_COMMIT`, `RAILWAY_GIT_COMMIT_SHA`, `VERCEL_GIT_COMMIT_SHA`, else `unknown`. It does not touch the database. |
 | Pin Rust, add markers | `rust-toolchain.toml` pins `1.99.1` (profile minimal). `bench/build.sh {install|build|all}` prints the `::bench::` markers. |
 | CORS default | Upstream defaulted `FRONTEND_ORIGIN` to `"*"`, which actix-cors rejects, so the server never started without the variable. Unset now means any origin. |
 | Fly and Vercel configs | `Dockerfile.fly` and `Dockerfile.vercel` (identical below the header), `fly.toml`, `vercel.json`. The upstream root `Dockerfile` (dev image with cargo-watch) is renamed to `Dockerfile.dev`; `compose.yaml` points to it. |
@@ -55,12 +55,12 @@
 - Container Runtime via `Dockerfile.vercel` and `vercel.json` (`framework: container`, `git.deploymentEnabled: false`).
 - Database: new database `rust_conduit` in the existing Neon project of the `bdb-express-react-pg-db` resource (created with SQL as `neondb_owner`). `DATABASE_URL` (sensitive, production) is the unpooled URL with the database name changed. `SECRET_KEY` (sensitive, production).
 - The build log shows `Restoring the Buildah store cache ... miss`, so the store cache is active on this project without `VERCEL_BUILDAH_STORE_CACHE`.
-- Smoke deploy `bdb-rust-actix-9d3gauk97-build-deploy-bench.vercel.app`: READY, `/api/tags` 200. `/version` returns `unknown`: on a CLI upload Buildah received neither `--build-env BENCH_GIT_COMMIT` nor `VERCEL_GIT_COMMIT_SHA` (log: `missing "BENCH_GIT_COMMIT" build argument`). Follow-up: a Git-source deployment or another verified way to pass the commit.
+- Smoke deploy `bdb-rust-actix-9d3gauk97-build-deploy-bench.vercel.app`: READY, `/api/tags` 200. `/version` returns `unknown`: on a CLI upload Buildah received neither `--build-env BENCH_GIT_COMMIT` nor `VERCEL_GIT_COMMIT_SHA` (log: `missing "BENCH_GIT_COMMIT" build argument`; the argument is now `BENCH_COMMIT`). Follow-up: a Git-source deployment or another verified way to pass the commit.
 
 ### Fly.io
 
 - Org `personal`. App `bdb-rust-actix-pg`, https://bdb-rust-actix-pg.fly.dev, `iad`, one Machine `845d23f2d00448` shared-cpu-1x 512 MB, always on (`fly.toml`).
 - Database: the existing `bdb-express-react-pg-db` postgres-flex cluster, attached with `flyctl postgres attach ... --database-name rust_conduit --variable-name DATABASE_URL`. The cluster Machine `8747907be4e508` was stopped and was started for this setup. `SECRET_KEY` set with `secrets import --stage`.
-- Deploy from a clean `git archive` with `--build-arg BENCH_GIT_COMMIT=<sha>` (the harness must pass it for `/version`).
+- Deploy from a clean `git archive` with `--build-arg BENCH_COMMIT=<sha>` (the harness must pass it for `/version`).
 - The default Depot builder failed twice (`connecting to Depot builder: ... authentication handshake failed: EOF`). The smoke deploy used `--depot=false`, which created the org builder app `fly-builder-rosy-headland-8386`. Its first attempt built but failed at the image push (`unable to upgrade to h2c, received 500`); the retry used cached layers and succeeded.
 - Smoke deploy: Machine healthy, `/api/tags` 200, `/version` correct.

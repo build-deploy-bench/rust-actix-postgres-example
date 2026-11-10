@@ -1,5 +1,5 @@
 # Fly.io config for the build-deploy benchmark. Create the app with `fly apps create <name>`, then deploy with
-# `fly deploy --config fly.toml --app <name> --build-arg BENCH_GIT_COMMIT=<sha>`. The app name is passed by the
+# `fly deploy --config fly.toml --app <name> --build-arg BENCH_COMMIT=<sha>`. The app name is passed by the
 # harness, not stored here.
 primary_region = "iad"
 

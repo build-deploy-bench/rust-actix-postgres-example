@@ -18,8 +18,8 @@ COPY build.rs build.rs
 COPY migrations migrations
 COPY src src
 # build.rs embeds the first non-empty one as the /version commit. Vercel passes VERCEL_GIT_COMMIT_SHA;
-# the Fly harness passes --build-arg BENCH_GIT_COMMIT=<sha>.
-ARG BENCH_GIT_COMMIT
+# the Fly harness passes --build-arg BENCH_COMMIT=<sha>.
+ARG BENCH_COMMIT
 ARG VERCEL_GIT_COMMIT_SHA
 RUN sh ./bench/build.sh build
 
