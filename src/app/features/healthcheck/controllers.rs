@@ -12,5 +12,11 @@ pub async fn version() -> impl Responder {
         .ok()
         .filter(|value| !value.is_empty())
         .unwrap_or_else(|| "unknown".to_string());
-    HttpResponse::Ok().json(json!({ "commit": env!("CONDUIT_COMMIT"), "run": run }))
+    // Railway gets no BENCH_RUN_ID: a changed variable invalidates part of its build cache. Its own
+    // deployment ID identifies the deployment instead.
+    let deployment = std::env::var("RAILWAY_DEPLOYMENT_ID")
+        .ok()
+        .filter(|value| !value.is_empty())
+        .unwrap_or_else(|| "unknown".to_string());
+    HttpResponse::Ok().json(json!({ "commit": env!("CONDUIT_COMMIT"), "run": run, "deployment": deployment }))
 }
