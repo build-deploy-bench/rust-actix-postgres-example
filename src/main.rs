@@ -24,7 +24,8 @@ async fn main() -> std::io::Result<()> {
         AppState::new(pool)
     };
 
-    HttpServer::new(move || {
+    let port = listen_port();
+    let server = HttpServer::new(move || {
         App::new()
             .wrap(Logger::default())
             .app_data(actix_web::web::Data::new(state.clone()))
@@ -32,7 +33,14 @@ async fn main() -> std::io::Result<()> {
             .wrap(app::drivers::middlewares::auth::Authentication)
             .configure(app::drivers::routes::api)
     })
-    .bind(constants::BIND)?
-    .run()
-    .await
+    .bind((constants::BIND_HOST, port))?;
+    println!("Server running on port {port}");
+    server.run().await
+}
+
+fn listen_port() -> u16 {
+    match std::env::var(constants::env_key::PORT) {
+        Ok(port) => port.parse().expect("PORT must be a port number"),
+        Err(_) => constants::DEFAULT_PORT,
+    }
 }
