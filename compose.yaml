@@ -1,7 +1,9 @@
 services:
   app:
     container_name: app
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     command: 'bash -c "diesel setup && cargo watch --exec run"'
     volumes:
       - .:/app

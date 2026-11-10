@@ -1,0 +1,35 @@
+# Vercel Container Runtime image. Vercel detects this name eagerly; Render, Railway and Fly ignore it.
+# Keep Dockerfile.fly and Dockerfile.vercel identical below this line, so both providers do the same build work.
+FROM rust:1.99.1-slim-bookworm AS build
+# Diesel links libpq at build time.
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends libpq-dev \
+ && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+
+# Install and build are separate RUN steps so the ::bench:: markers and BuildKit step times stay separable.
+# Manifests are copied first so a warm layer cache can skip the install step. cargo fetch needs a bin
+# target to read the manifest, so an empty src/main.rs stands in until the sources are copied.
+COPY rust-toolchain.toml Cargo.toml Cargo.lock ./
+COPY bench/build.sh bench/build.sh
+RUN mkdir src && touch src/main.rs && sh ./bench/build.sh install
+
+COPY build.rs build.rs
+COPY migrations migrations
+COPY src src
+# build.rs embeds the first non-empty one as the /version commit. Vercel passes VERCEL_GIT_COMMIT_SHA;
+# the Fly harness passes --build-arg BENCH_GIT_COMMIT=<sha>.
+ARG BENCH_GIT_COMMIT
+ARG VERCEL_GIT_COMMIT_SHA
+RUN sh ./bench/build.sh build
+
+FROM debian:bookworm-slim
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends libpq5 ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+ENV PORT=80
+WORKDIR /app
+COPY --from=build /app/target/release/conduit ./target/release/conduit
+EXPOSE 80
+# Same start command as Render and Railway, so app boot time is comparable.
+CMD ["./target/release/conduit"]
