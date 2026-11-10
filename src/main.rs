@@ -20,6 +20,7 @@ async fn main() -> std::io::Result<()> {
 
     let state = {
         let pool = utils::db::establish_connection();
+        utils::db::run_migrations(&pool);
         use app::drivers::middlewares::state::AppState;
         AppState::new(pool)
     };
