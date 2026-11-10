@@ -64,3 +64,4 @@
 - Deploy from a clean `git archive` with `--build-arg BENCH_COMMIT=<sha>` (the harness must pass it for `/version`).
 - The default Depot builder failed twice (`connecting to Depot builder: ... authentication handshake failed: EOF`). The smoke deploy used `--depot=false`, which created the org builder app `fly-builder-rosy-headland-8386`. Its first attempt built but failed at the image push (`unable to upgrade to h2c, received 500`); the retry used cached layers and succeeded.
 - Smoke deploy: Machine healthy, `/api/tags` 200, `/version` correct.
+- 2026-11-10: deploy of `548d90c` with `--depot=false --build-arg BENCH_COMMIT=<sha>`: `/version` returned that SHA, `/api/tags` 200.
