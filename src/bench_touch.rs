@@ -1,1 +1,1 @@
-pub const BENCH_TOUCH: &str = "2026-11-11-samples-v2-render-rust-r1-215400";
+pub const BENCH_TOUCH: &str = "2026-11-11-samples-v2-render-rust-r2-215701";
