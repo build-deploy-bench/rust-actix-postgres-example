@@ -14,6 +14,8 @@ mod utils;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    // The benchmark parsers read this marker as the start of app boot. The binary is the whole start command.
+    println!("::bench::start {}", epoch_ms());
     println!("start conduit server...");
     std::env::set_var("RUST_LOG", "actix_web=trace");
     env_logger::init();
@@ -36,6 +38,8 @@ async fn main() -> std::io::Result<()> {
     })
     .bind((constants::BIND_HOST, port))?;
     println!("Server running on port {port}");
+    // The socket is bound here, so the port accepts connections from this point.
+    println!("::bench::listening {}", epoch_ms());
     server.run().await
 }
 
@@ -44,4 +48,11 @@ fn listen_port() -> u16 {
         Ok(port) => port.parse().expect("PORT must be a port number"),
         Err(_) => constants::DEFAULT_PORT,
     }
+}
+
+fn epoch_ms() -> u128 {
+    std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .expect("system clock is before 1970")
+        .as_millis()
 }
