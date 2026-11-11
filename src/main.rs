@@ -7,6 +7,9 @@ extern crate log;
 use actix_web::middleware::Logger;
 use actix_web::{App, HttpServer};
 mod app;
+// Only the harness changes this module; nothing reads the constant.
+#[allow(dead_code)]
+mod bench_touch;
 mod constants;
 mod error;
 mod schema;
