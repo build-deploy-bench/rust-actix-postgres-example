@@ -1,3 +1,1 @@
-// The benchmark harness writes a new value into this file in a commit of its own before each warm run, so the
-// build step gets new input and no provider can skip it. Do not edit it by hand.
-pub const BENCH_TOUCH: &str = "initial";
+pub const BENCH_TOUCH: &str = "2026-11-11-samples-v2-vercel-rust-r1-214229";
