@@ -51,7 +51,7 @@
 
 ### Vercel
 
-- Team `build-deploy-bench` `team_oVjpdXNb0OhSfAzc6FSNjen8`. Project `bdb-rust-actix-pg` `prj_4mMmwwF6HMyvDeROweAGsGskQ3nn`, https://bdb-rust-actix-pg.vercel.app, function region `iad1`, build machine standard (elastic), Fluid. No Git link (same as the Node project); deploys are CLI uploads of a clean `git archive`.
+- Team `build-deploy-bench` `team_oVjpdXNb0OhSfAzc6FSNjen8`. Project `bdb-rust-actix-pg` `prj_4mMmwwF6HMyvDeROweAGsGskQ3nn`, https://bdb-rust-actix-pg.vercel.app, function region `iad1`, build machine `standard`, `fixed` (elastic selection moved one build to `enhanced` on 2026-11-11), Fluid. No Git link (same as the Node project); deploys are CLI uploads of a clean `git archive`.
 - Container Runtime via `Dockerfile.vercel` and `vercel.json` (`framework: container`, `git.deploymentEnabled: false`).
 - Database: new database `rust_conduit` in the existing Neon project of the `bdb-express-react-pg-db` resource (created with SQL as `neondb_owner`). `DATABASE_URL` (sensitive, production) is the unpooled URL with the database name changed. `SECRET_KEY` (sensitive, production).
 - The build log shows `Restoring the Buildah store cache ... miss`, so the store cache is active on this project without `VERCEL_BUILDAH_STORE_CACHE`.
@@ -59,7 +59,7 @@
 
 ### Fly.io
 
-- Org `personal`. App `bdb-rust-actix-pg`, https://bdb-rust-actix-pg.fly.dev, `iad`, one Machine `845d23f2d00448` shared-cpu-1x 512 MB, always on (`fly.toml`).
+- Org `personal`. App `bdb-rust-actix-pg`, https://bdb-rust-actix-pg.fly.dev, `iad`, one Machine `845d23f2d00448` shared-cpu-1x with 1 GB (the `fly launch` default), always on (`fly.toml`).
 - Database: the existing `bdb-express-react-pg-db` postgres-flex cluster, attached with `flyctl postgres attach ... --database-name rust_conduit --variable-name DATABASE_URL`. The cluster Machine `8747907be4e508` was stopped and was started for this setup. `SECRET_KEY` set with `secrets import --stage`.
 - Deploy from a clean `git archive` with `--build-arg BENCH_COMMIT=<sha>` (the harness must pass it for `/version`).
 - The default Depot builder failed twice (`connecting to Depot builder: ... authentication handshake failed: EOF`). The smoke deploy used `--depot=false`, which created the org builder app `fly-builder-rosy-headland-8386`. Its first attempt built but failed at the image push (`unable to upgrade to h2c, received 500`); the retry used cached layers and succeeded.
