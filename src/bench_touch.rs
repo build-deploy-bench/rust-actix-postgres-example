@@ -1,1 +1,1 @@
-pub const BENCH_TOUCH: &str = "2026-11-12-full-railway-rust-r1-001600";
+pub const BENCH_TOUCH: &str = "2026-11-12-full-railway-rust-r2-001744";
