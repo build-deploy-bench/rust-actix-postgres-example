@@ -1,0 +1,5 @@
+# Pinned so every provider compiles with the same Rust. Matches the rust image tag in Dockerfile.fly and Dockerfile.vercel.
+# The minimal profile skips docs, clippy and rustfmt, which the build does not use.
+[toolchain]
+channel = "1.99.1"
+profile = "minimal"

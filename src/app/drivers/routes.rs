@@ -3,6 +3,10 @@ use actix_web::web;
 use actix_web::web::{delete, get, post, put};
 
 pub fn api(cfg: &mut web::ServiceConfig) {
+    cfg.route(
+        "/version",
+        get().to(app::features::healthcheck::controllers::version),
+    );
     cfg.service(
         web::scope("/api")
             .service(

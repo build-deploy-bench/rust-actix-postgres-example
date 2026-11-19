@@ -1,3 +1,6 @@
+> [!WARNING]
+> **Benchmark fixture: do not use.** This repository is a copy of [snamiki1212/realworld-v1-rust-actix-web-diesel](https://github.com/snamiki1212/realworld-v1-rust-actix-web-diesel). We use it only as a test workload to measure build and deploy times on hosting platforms. It has benchmark patches (see [`BENCH.md`](BENCH.md)), gets no upstream fixes, and is not maintained. To use or contribute to the project, go to [snamiki1212/realworld-v1-rust-actix-web-diesel](https://github.com/snamiki1212/realworld-v1-rust-actix-web-diesel).
+
 <a href="https://github.com/snamiki1212/realworld-v1-rust-actix-web-diesel"><img src="https://user-images.githubusercontent.com/26793088/168470794-337f3e7f-9c94-4cae-9505-1684b3251de5.png" alt="header"></a>
 
 <a href="https://github.com/snamiki1212/realworld-v1-rust-actix-web-diesel/actions?query=branch%3Amain"><img src="https://github.com/snamiki1212/realworld-v1-rust-actix-web-diesel/actions/workflows/ci.yml/badge.svg?branch=main" alt="badge" /></a>
