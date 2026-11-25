@@ -1,1 +1,1 @@
-pub const BENCH_TOUCH: &str = "2026-11-23-gh12-render-rust-r3-065555";
+pub const BENCH_TOUCH: &str = "2026-11-25-gh13-railway-rust-r1-063025";
