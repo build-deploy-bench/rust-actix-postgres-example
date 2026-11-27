@@ -1,1 +1,1 @@
-pub const BENCH_TOUCH: &str = "2026-11-27-gh14-fly-rust-r3-063610";
+pub const BENCH_TOUCH: &str = "2026-11-27-gh14-vercel-rust-r2-063719";
